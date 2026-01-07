@@ -3,20 +3,31 @@
   "version": "1.0.0",
   "main": "index.ts",
   "scripts": {
-    "start": "expo start",
-    "android": "expo start --android",
-    "ios": "expo start --ios",
-    "web": "expo start --web"
+    "start": "npx expo start -c",
+    "android": "npx expo start --android",
+    "ios": "npx expo start --ios",
+    "web": "npx expo start --web"
   },
   "dependencies": {
-    "expo": "~54.0.30",
-    "expo-status-bar": "~3.0.9",
+    "@react-native-community/slider": "5.1.1",
+    "expo": "^54.0.30",
+    "expo-router": "^6.0.21",
+    "expo-status-bar": "^3.0.9",
+    "nativewind": "^4.2.1",
+    "prettier-plugin-tailwindcss": "^0.5.14",
     "react": "19.1.0",
-    "react-native": "0.81.5"
+    "react-native-safe-area-context": "^5.4.0",
+    "zustand": "^5.0.9"
   },
   "devDependencies": {
-    "@types/react": "~19.1.0",
-    "typescript": "~5.9.2"
+    "@react-native-community/cli": "20.1.0",
+    "@expo/cli": "54.0.20",
+    "@types/react": "^19.1.0",
+    "babel-preset-expo": "^54.0.9",
+    "react-dom": "19.1.0",
+    "react-native-web": "^0.21.2",
+    "tailwindcss": "^3.4.19",
+    "typescript": "^5.9.2"
   },
   "private": true
 }
