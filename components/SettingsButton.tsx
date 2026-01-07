@@ -7,7 +7,7 @@ export default function SettingsButton() {
   
   return (
     <TouchableOpacity
-      className="absolute top-5 right-6 z-10 w-10 h-10 items-center justify-center"
+      className="absolute top-2 right-6 z-10 w-10 h-10 items-center justify-center"
       onPress={() => router.push('/settings')}
     >
       <Text className="text-2xl">⚙️</Text>

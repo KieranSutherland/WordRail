@@ -2,8 +2,10 @@ import React, { useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import SettingsButton from '../components/SettingsButton';
+import { colours } from '../theme/colours';
 import { useAppStore } from '../store';
 import { getORPIndex, getWordDelay } from '../utils/orpCalculator';
+import BackButton from '../components/BackButton';
 
 export default function Reader() {
     const router = useRouter();
@@ -46,7 +48,7 @@ export default function Reader() {
                 clearTimeout(intervalRef.current);
             }
         };
-    }, [ isPlaying, currentIndex, words, baseSpeed ]);
+    }, [ isPlaying, currentIndex, words, baseSpeed, nextWord, setIsPlaying ]);
 
     const handlePlayPause = () => {
         setIsPlaying(!isPlaying);
@@ -60,27 +62,13 @@ export default function Reader() {
         if (isPlaying) {
             setIsPlaying(false);
         }
-
-        Alert.alert(
-            'Exit Reader',
-            'Do you want to exit? Your progress will be lost.',
-            [
-                { text: 'Cancel', style: 'cancel' },
-                {
-                    text: 'Exit',
-                    onPress: () => {
-                        resetAll();
-                        router.back();
-                    }
-                }
-            ]
-        );
+        resetAll();
     };
 
     const renderWord = () => {
         if (words.length === 0 || currentIndex >= words.length) {
             return (
-                <Text className="text-4xl text-slate-500 text-center">
+                <Text style={ { fontSize: 32, color: colours.textSecondary, textAlign: 'center' } }>
                     { words.length > 0 ? '🎉 Finished!' : 'No text loaded' }
                 </Text>
             );
@@ -90,37 +78,33 @@ export default function Reader() {
         const orpIndex = getORPIndex(word);
         const letters = word.split('');
 
-        // Split word into before and after ORP
         const beforeORP = letters.slice(0, orpIndex);
         const orpLetter = letters[ orpIndex ];
         const afterORP = letters.slice(orpIndex + 1);
 
         return (
-            <View className="items-center justify-center">
-                <View className="flex-row items-center">
-                    {/* Left part - right aligned */ }
-                    <View className="flex-row items-center justify-end w-36">
+            <View style={ { alignItems: 'center', justifyContent: 'center', width: '100%' } }>
+                <View style={ { flexDirection: 'row', alignItems: 'center' } }>
+                    <View style={ { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', width: 144 } }>
                         { beforeORP.map((char, index) => (
                             <Text
                                 key={ `before-${index}-${char}` }
-                                className="text-6xl font-bold text-slate-100"
+                                style={ { fontSize: 56, fontWeight: 'bold', color: colours.textPrimary } }
                             >
                                 { char }
                             </Text>
                         )) }
                     </View>
 
-                    {/* ORP letter - centered */ }
-                    <Text className="text-6xl font-bold text-slate-100">
+                    <Text style={ { fontSize: 56, fontWeight: 'bold', color: colours.textPrimary } }>
                         { orpLetter }
                     </Text>
 
-                    {/* Right part - left aligned */ }
-                    <View className="flex-row items-center justify-start w-36">
+                    <View style={ { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', width: 144 } }>
                         { afterORP.map((char, index) => (
                             <Text
                                 key={ `after-${index}-${char}` }
-                                className="text-6xl font-bold text-slate-100"
+                                style={ { fontSize: 56, fontWeight: 'bold', color: colours.textPrimary } }
                             >
                                 { char }
                             </Text>
@@ -136,54 +120,70 @@ export default function Reader() {
         : 0;
 
     return (
-        <SafeAreaView className="flex-1 bg-[#0f0f1a]">
+        <SafeAreaView style={ { flex: 1, backgroundColor: colours.background } }>
             <View className="flex-1 pt-8 px-6">
                 <SettingsButton />
 
-                <TouchableOpacity onPress={ handleExit } className="mb-4">
-                    <Text className="text-purple-400 font-semibold">← Exit</Text>
-                </TouchableOpacity>
+                <BackButton onPress={handleExit} />
 
                 <View className="mb-6">
-                    <View className="flex-row justify-between items-center mb-3">
-                        <Text className="text-sm font-semibold text-slate-300">
+                    <View style={ { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 } }>
+                        <Text style={ { fontSize: 14, fontWeight: '600', color: colours.textPrimary } }>
                             { currentIndex + 1 } / { words.length }
                         </Text>
-                        <Text className="text-sm text-slate-400">
+                        <Text style={ { fontSize: 14, color: colours.textSecondary } }>
                             { Math.round(60000 / baseSpeed) } WPM
                         </Text>
                     </View>
-                    <View className="h-1.5 bg-[#1a1a2e] rounded-full overflow-hidden">
+                    <View style={ { height: 6, backgroundColor: colours.surface, borderRadius: 999, overflow: 'hidden' } }>
                         <View
-                            className="h-full bg-purple-500 rounded-full"
-                            style={ { width: `${progress}%` as any } }
+                            style={ {
+                                height: '100%',
+                                backgroundColor: colours.accent,
+                                borderRadius: 999,
+                                width: `${progress}%`
+                            } }
                         />
                     </View>
                 </View>
 
-                <View className="flex-1 bg-[#1a1a2e] rounded-3xl p-8 mb-6 items-center justify-center">
+                <View style={ { flex: 1, backgroundColor: colours.surface, borderRadius: 24, padding: 32, marginBottom: 24, alignItems: 'center', justifyContent: 'center' } }>
                     { renderWord() }
                 </View>
 
                 <View className="flex-row gap-3 mb-4">
                     <TouchableOpacity
-                        className={ `flex-1 rounded-2xl py-4 items-center ${isPlaying ? 'bg-yellow-400' : 'bg-purple-500'
-                            }` }
+                        style={ {
+                            flex: 1,
+                            backgroundColor: isPlaying ? '#FFD60A' : colours.accent,
+                            borderRadius: 16,
+                            paddingVertical: 16,
+                            alignItems: 'center'
+                        } }
                         onPress={ handlePlayPause }
                         disabled={ words.length === 0 }
                     >
-                        <Text className="text-slate-900 font-bold text-lg">
+                        <Text style={ { color: colours.textPrimary, fontWeight: 'bold', fontSize: 18 } }>
                             { isPlaying ? '⏸ Pause' : currentIndex > 0 ? '▶️ Resume' : '▶️ Start' }
                         </Text>
                     </TouchableOpacity>
 
                     <TouchableOpacity
-                        className="flex-1 bg-[#2a2a3e] rounded-2xl py-4 items-center"
+                        style={ {
+                            flex: 1,
+                            backgroundColor: (words.length === 0 || currentIndex === 0) ? colours.surface : colours.accentMuted,
+                            borderRadius: 16,
+                            paddingVertical: 16,
+                            alignItems: 'center'
+                        } }
                         onPress={ handleReset }
                         disabled={ words.length === 0 || currentIndex === 0 }
                     >
-                        <Text className={ `font-bold text-lg ${words.length === 0 || currentIndex === 0 ? 'text-slate-600' : 'text-slate-300'
-                            }` }>
+                        <Text style={ {
+                            color: (words.length === 0 || currentIndex === 0) ? colours.textSecondary : colours.textPrimary,
+                            fontWeight: 'bold',
+                            fontSize: 18
+                        } }>
                             ↺ Reset
                         </Text>
                     </TouchableOpacity>
@@ -191,21 +191,27 @@ export default function Reader() {
 
                 { currentIndex >= words.length && words.length > 0 && (
                     <TouchableOpacity
-                        className="bg-green-400 rounded-2xl py-4 items-center mb-4"
+                        style={ {
+                            backgroundColor: '#34C759',
+                            borderRadius: 16,
+                            paddingVertical: 16,
+                            alignItems: 'center',
+                            marginBottom: 16
+                        } }
                         onPress={ () => {
                             resetAll();
                             router.push('/');
                         } }
                     >
-                        <Text className="text-slate-900 font-bold text-lg">
+                        <Text style={ { color: colours.textPrimary, fontWeight: 'bold', fontSize: 18 } }>
                             ✓ Done - Read Another
                         </Text>
                     </TouchableOpacity>
                 ) }
 
-                <View className="bg-[#1a1a2e] rounded-2xl p-4">
-                    <Text className="text-xs text-slate-400 leading-5">
-                        Words are centered at their <Text className="font-semibold text-purple-300">Optimal Recognition Point (ORP)</Text> to
+                <View style={ { backgroundColor: colours.surface, borderRadius: 16, padding: 16 } }>
+                    <Text style={ { fontSize: 12, color: colours.textSecondary, lineHeight: 20 } }>
+                        Words are centered at their <Text style={ { fontWeight: '600', color: colours.accent } }>Optimal Recognition Point (ORP)</Text> to
                         keep your eyes in one place for faster reading
                     </Text>
                 </View>
