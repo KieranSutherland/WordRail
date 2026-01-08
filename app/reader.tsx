@@ -1,14 +1,19 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, SafeAreaView, Alert } from 'react-native';
+import { View, Text, TouchableOpacity, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import SettingsButton from '../components/SettingsButton';
-import { colours } from '../theme/colours';
+import SettingsButton from '../components/buttons/SettingsButton';
 import { useAppStore } from '../store';
-import { getORPIndex, getWordDelay } from '../utils/orpCalculator';
-import BackButton from '../components/BackButton';
+import { getWordDelay } from '../utils/orpCalculator';
+import BackButton from '../components/buttons/BackButton';
+import { Ionicons } from '@expo/vector-icons';
+import CurrentWord from '../components/CurrentWord';
+import { useAppTheme } from '../components/ThemeProvider';
+import TopBar from '../components/TopBar';
 
 export default function Reader() {
     const router = useRouter();
+    const { colors } = useAppTheme();
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     const words = useAppStore((state) => state.words);
@@ -16,7 +21,6 @@ export default function Reader() {
     const isPlaying = useAppStore((state) => state.isPlaying);
     const baseSpeed = useAppStore((state) => state.baseSpeed);
     const setIsPlaying = useAppStore((state) => state.setIsPlaying);
-    const setCurrentIndex = useAppStore((state) => state.setCurrentIndex);
     const nextWord = useAppStore((state) => state.nextWord);
     const resetReading = useAppStore((state) => state.resetReading);
     const resetAll = useAppStore((state) => state.resetAll);
@@ -65,84 +69,32 @@ export default function Reader() {
         resetAll();
     };
 
-    const renderWord = () => {
-        if (words.length === 0 || currentIndex >= words.length) {
-            return (
-                <Text style={ { fontSize: 32, color: colours.textSecondary, textAlign: 'center' } }>
-                    { words.length > 0 ? '🎉 Finished!' : 'No text loaded' }
-                </Text>
-            );
-        }
-
-        const word = words[ currentIndex ];
-        const orpIndex = getORPIndex(word);
-        const letters = word.split('');
-
-        const beforeORP = letters.slice(0, orpIndex);
-        const orpLetter = letters[ orpIndex ];
-        const afterORP = letters.slice(orpIndex + 1);
-
-        return (
-            <View style={ { alignItems: 'center', justifyContent: 'center', width: '100%' } }>
-                <View style={ { flexDirection: 'row', alignItems: 'center' } }>
-                    <View style={ { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-end', width: 144 } }>
-                        { beforeORP.map((char, index) => (
-                            <Text
-                                key={ `before-${index}-${char}` }
-                                style={ { fontSize: 56, fontWeight: 'bold', color: colours.textPrimary } }
-                            >
-                                { char }
-                            </Text>
-                        )) }
-                    </View>
-
-                    <Text style={ { fontSize: 56, fontWeight: 'bold', color: colours.textPrimary } }>
-                        { orpLetter }
-                    </Text>
-
-                    <View style={ { flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', width: 144 } }>
-                        { afterORP.map((char, index) => (
-                            <Text
-                                key={ `after-${index}-${char}` }
-                                style={ { fontSize: 56, fontWeight: 'bold', color: colours.textPrimary } }
-                            >
-                                { char }
-                            </Text>
-                        )) }
-                    </View>
-                </View>
-            </View>
-        );
-    };
-
     const progress = words.length > 0
         ? Math.min(((currentIndex + 1) / words.length) * 100, 100)
         : 0;
 
     const displayableIndex = words.length <= currentIndex ? words.length : currentIndex + 1
+    const resetButtonDisabled = words.length === 0 || currentIndex === 0;
 
     return (
-        <SafeAreaView style={ { flex: 1, backgroundColor: colours.background } }>
+        <SafeAreaView style={ { flex: 1, backgroundColor: colors.background } }>
             <View className="flex-1 gap-6 p-6">
-                <View className="h-10">
-                    <SettingsButton />
-                    <BackButton onPress={ handleExit } />
-                </View>
+                <TopBar onBack={ handleExit } />
 
                 <View style={ { marginTop: -8 } }>
                     <View style={ { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 12 } }>
-                        <Text style={ { fontSize: 14, fontWeight: '600', color: colours.textPrimary } }>
+                        <Text style={ { fontSize: 14, fontWeight: '600', color: colors.text } }>
                             { displayableIndex } / { words.length }
                         </Text>
-                        <Text style={ { fontSize: 14, color: colours.textSecondary } }>
+                        <Text style={ { fontSize: 14, color: colors.textSecondary } }>
                             { Math.round(60000 / baseSpeed) } WPM
                         </Text>
                     </View>
-                    <View style={ { height: 6, backgroundColor: colours.surface, borderRadius: 999, overflow: 'hidden' } }>
+                    <View style={ { height: 6, backgroundColor: colors.card, borderRadius: 999, overflow: 'hidden' } }>
                         <View
                             style={ {
                                 height: '100%',
-                                backgroundColor: colours.accent,
+                                backgroundColor: colors.primary,
                                 borderRadius: 999,
                                 width: `${progress}%`
                             } }
@@ -152,20 +104,20 @@ export default function Reader() {
 
                 <View style={ {
                     flex: 1,
-                    backgroundColor: colours.surface,
+                    backgroundColor: colors.card,
                     borderRadius: 24,
                     padding: 32,
                     alignItems: 'center',
                     justifyContent: 'center'
                 } }>
-                    { renderWord() }
+                    <CurrentWord />
                 </View>
 
                 <View className="flex-row gap-4">
                     <TouchableOpacity
                         style={ {
                             flex: 1,
-                            backgroundColor: colours.accent,
+                            backgroundColor: colors.primary,
                             borderRadius: 16,
                             paddingVertical: 16,
                             alignItems: 'center'
@@ -173,24 +125,22 @@ export default function Reader() {
                         onPress={ handlePlayPause }
                         disabled={ words.length === 0 }
                     >
-                        <Text style={ { color: colours.textPrimary, fontWeight: 'bold', fontSize: 18 } }>
-                            { isPlaying ? 'Pause' : currentIndex > 0 ? 'Resume' : 'Start' }
-                        </Text>
+                        <Ionicons name={ isPlaying ? 'pause' : 'play' } size={ 30 } color={ colors.text } />
                     </TouchableOpacity>
 
                     <TouchableOpacity
                         style={ {
                             flex: 1,
-                            backgroundColor: (words.length === 0 || currentIndex === 0) ? colours.surface : colours.accentMuted,
+                            backgroundColor: resetButtonDisabled ? colors.card : colors.secondary,
                             borderRadius: 16,
                             paddingVertical: 16,
                             alignItems: 'center'
                         } }
                         onPress={ handleReset }
-                        disabled={ words.length === 0 || currentIndex === 0 }
+                        disabled={ resetButtonDisabled }
                     >
                         <Text style={ {
-                            color: (words.length === 0 || currentIndex === 0) ? colours.textSecondary : colours.textPrimary,
+                            color: resetButtonDisabled ? colors.textSecondary : colors.text,
                             fontWeight: 'bold',
                             fontSize: 18
                         } }>

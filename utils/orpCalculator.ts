@@ -1,4 +1,7 @@
 export function getORPIndex(word: string): number {
+    if (word.length === 3) {
+        return 1;
+    }
     // 40% of the word length - 1 for zero-based index.
     return Math.max(0, Math.round(0.4 * word.length) - 1);
 }

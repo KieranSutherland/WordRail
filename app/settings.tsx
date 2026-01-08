@@ -1,13 +1,15 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView, SafeAreaView } from 'react-native';
+import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import { colours } from '../theme/colours';
 import { useAppStore } from '../store';
 import { SpeedPreset } from '../types';
-import IconButton from '../components/IconButton';
+import IconButton from '../components/buttons/IconButton';
+import { useAppTheme } from '../components/ThemeProvider';
 
 export default function Settings() {
     const router = useRouter();
+    const { colors } = useAppTheme();
     const baseSpeed = useAppStore((state) => state.baseSpeed);
     const updateSpeed = useAppStore((state) => state.updateSpeed);
 
@@ -20,7 +22,7 @@ export default function Settings() {
     ];
 
     return (
-        <SafeAreaView style={ { flex: 1, backgroundColor: colours.background } }>
+        <SafeAreaView style={ { flex: 1, backgroundColor: colors.background } }>
             <ScrollView className="flex-1">
                 <View className="p-6">
                     <View>
@@ -36,15 +38,15 @@ export default function Settings() {
                         />
                     </View>
 
-                    <Text className="w-fit" style={ { fontSize: 28, fontWeight: 'bold', color: colours.textPrimary, marginBottom: 8 } }>Settings</Text>
-                    <Text style={ { color: colours.textSecondary, marginBottom: 32 } }>
+                    <Text className="w-fit" style={ { fontSize: 28, fontWeight: 'bold', color: colors.text, marginBottom: 8 } }>Settings</Text>
+                    <Text style={ { color: colors.textSecondary, marginBottom: 32 } }>
                         Customize your reading experience
                     </Text>
 
-                    <Text style={ { fontSize: 14, fontWeight: '600', color: colours.textPrimary, marginBottom: 8 } }>
+                    <Text style={ { fontSize: 14, fontWeight: '600', color: colors.text, marginBottom: 8 } }>
                         Reading Speed (Base)
                     </Text>
-                    <Text style={ { fontSize: 12, color: colours.textSecondary, marginBottom: 16 } }>
+                    <Text style={ { fontSize: 12, color: colors.textSecondary, marginBottom: 16 } }>
                         Current: { baseSpeed }ms per word ({ Math.round(60000 / baseSpeed) } WPM)
                     </Text>
 
@@ -53,7 +55,7 @@ export default function Settings() {
                             <TouchableOpacity
                                 key={ preset.value }
                                 style={ {
-                                    backgroundColor: baseSpeed === preset.value ? colours.accent : colours.surface,
+                                    backgroundColor: baseSpeed === preset.value ? colors.primary : colors.card,
                                     borderRadius: 16,
                                     paddingVertical: 16,
                                     paddingHorizontal: 20
@@ -64,13 +66,13 @@ export default function Settings() {
                                     <Text style={ {
                                         fontWeight: '600',
                                         fontSize: 16,
-                                        color: baseSpeed === preset.value ? colours.textPrimary : colours.textPrimary
+                                        color: baseSpeed === preset.value ? colors.text : colors.text
                                     } }>
                                         { preset.label }
                                     </Text>
                                     <Text style={ {
                                         fontSize: 14,
-                                        color: baseSpeed === preset.value ? colours.textPrimary : colours.textSecondary
+                                        color: baseSpeed === preset.value ? colors.text : colors.textSecondary
                                     } }>
                                         { Math.round(60000 / preset.value) } WPM
                                     </Text>
@@ -79,27 +81,27 @@ export default function Settings() {
                         )) }
                     </View>
 
-                    <View style={ { backgroundColor: colours.surface, borderRadius: 16, padding: 20, marginBottom: 24 } }>
+                    <View style={ { backgroundColor: colors.card, borderRadius: 16, padding: 20, marginBottom: 24 } }>
                         <Text style={ { fontSize: 12, fontWeight: '600', color: '#FFD60A', marginBottom: 8 } }>
                             ⚡ Speed Adjustments
                         </Text>
-                        <Text style={ { fontSize: 12, color: colours.textSecondary, lineHeight: 20 } }>
+                        <Text style={ { fontSize: 12, color: colors.textSecondary, lineHeight: 20 } }>
                             Longer words automatically display for more time. The base speed affects
                             short words most, while long words get proportionally more time.
                         </Text>
                     </View>
 
-                    <View style={ { backgroundColor: colours.surface, borderRadius: 16, padding: 20 } }>
-                        <Text style={ { fontSize: 12, fontWeight: '600', color: colours.accent, marginBottom: 12 } }>
+                    <View style={ { backgroundColor: colors.card, borderRadius: 16, padding: 20 } }>
+                        <Text style={ { fontSize: 12, fontWeight: '600', color: colors.primary, marginBottom: 12 } }>
                             💡 Reading Tips
                         </Text>
-                        <Text style={ { fontSize: 12, color: colours.textSecondary, lineHeight: 20, marginBottom: 8 } }>
+                        <Text style={ { fontSize: 12, color: colors.textSecondary, lineHeight: 20, marginBottom: 8 } }>
                             • Start with a slower speed and gradually increase
                         </Text>
-                        <Text style={ { fontSize: 12, color: colours.textSecondary, lineHeight: 20, marginBottom: 8 } }>
+                        <Text style={ { fontSize: 12, color: colors.textSecondary, lineHeight: 20, marginBottom: 8 } }>
                             • Focus on the center of the screen where words appear
                         </Text>
-                        <Text style={ { fontSize: 12, color: colours.textSecondary, lineHeight: 20 } }>
+                        <Text style={ { fontSize: 12, color: colors.textSecondary, lineHeight: 20 } }>
                             • Take regular breaks
                         </Text>
                     </View>

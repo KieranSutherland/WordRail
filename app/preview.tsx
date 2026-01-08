@@ -4,20 +4,20 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    ScrollView,
-    SafeAreaView,
     Alert
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import SettingsButton from '../components/SettingsButton';
-import { colours } from '../theme/colours';
 import { useAppStore } from '../store';
 import { processText } from '../utils/textProcessor';
-import BackButton from '../components/BackButton';
+import { useAppTheme } from '../components/ThemeProvider';
+import { InputOption } from '../types';
+import TopBar from '../components/TopBar';
 
 export default function Preview() {
     const router = useRouter();
-    const { inputType } = useLocalSearchParams<{ inputType: string }>();
+    const { colors } = useAppTheme();
+    const { inputType } = useLocalSearchParams<{ inputType: InputOption[ 'id' ] }>();
     const [ localText, setLocalText ] = useState('');
 
     const setText = useAppStore((state) => state.setText);
@@ -57,24 +57,21 @@ export default function Preview() {
     };
 
     return (
-        <SafeAreaView style={ { flex: 1, backgroundColor: colours.background } }>
+        <SafeAreaView style={ { flex: 1, backgroundColor: colors.background } }>
             <View className="flex-1 p-6 gap-6">
-                <View className="h-10">
-                    <SettingsButton />
-                    <BackButton />
-                </View>
+                <TopBar />
                 <View className="gap-6" style={ { marginTop: -8 } }>
 
-                    <Text style={ { fontSize: 28, fontWeight: 'bold', color: colours.textPrimary } }>
+                    <Text style={ { fontSize: 28, fontWeight: 'bold', color: colors.text } }>
                         Preview & Edit
                     </Text>
-                    <Text style={ { color: colours.textSecondary } }>
+                    <Text style={ { color: colors.textSecondary } }>
                         Review and adjust your text before reading
                     </Text>
 
                     { inputType !== 'text' && (
-                        <View style={ { backgroundColor: colours.surface, borderRadius: 16, padding: 16 } }>
-                            <Text style={ { fontSize: 14, color: colours.accent } }>
+                        <View style={ { backgroundColor: colors.card, borderRadius: 16, padding: 16 } }>
+                            <Text style={ { fontSize: 14, color: colors.primary } }>
                                 📌 { inputType === 'file' ? 'File upload' : 'Image OCR' } coming soon!
                                 For now, please paste your text manually.
                             </Text>
@@ -87,15 +84,15 @@ export default function Preview() {
                     <TextInput
                         style={ {
                             flex: 1,
-                            backgroundColor: colours.surface,
+                            backgroundColor: colors.card,
                             borderRadius: 16,
                             padding: 16,
                             fontSize: 16,
-                            color: colours.textPrimary,
+                            color: colors.text,
                         } }
                         multiline
                         placeholder={ getPlaceholder() }
-                        placeholderTextColor={ colours.textSecondary }
+                        placeholderTextColor={ colors.textSecondary }
                         value={ localText }
                         onChangeText={ setLocalText }
                         textAlignVertical="top"
@@ -104,15 +101,15 @@ export default function Preview() {
 
                 {/* Bottom section */ }
                 <View className="gap-6">
-                    <View style={ { backgroundColor: colours.surface, borderRadius: 16, padding: 16 } }>
-                        <Text style={ { fontSize: 14, color: colours.textSecondary } }>
-                            Word count: <Text style={ { color: colours.accent, fontWeight: '600' } }>{ processText(localText).length }</Text>
+                    <View style={ { backgroundColor: colors.card, borderRadius: 16, padding: 16 } }>
+                        <Text style={ { fontSize: 14, color: colors.textSecondary } }>
+                            Word count: <Text style={ { color: colors.primary, fontWeight: '600' } }>{ processText(localText).length }</Text>
                         </Text>
                     </View>
 
                     <TouchableOpacity
                         style={ {
-                            backgroundColor: localText.trim() ? colours.accent : colours.surface,
+                            backgroundColor: localText.trim() ? colors.primary : colors.card,
                             borderRadius: 16,
                             paddingVertical: 16,
                             alignItems: 'center',
@@ -121,7 +118,7 @@ export default function Preview() {
                         disabled={ !localText.trim() }
                     >
                         <Text style={ {
-                            color: localText.trim() ? colours.textPrimary : colours.textSecondary,
+                            color: localText.trim() ? colors.text : colors.textSecondary,
                             fontWeight: 'bold',
                             fontSize: 18
                         } }>

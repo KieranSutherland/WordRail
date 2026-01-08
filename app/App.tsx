@@ -1,5 +1,4 @@
 import { View, Text, TextInput, Pressable } from "react-native";
-import Slider from "@react-native-community/slider";
 import { useEffect, useRef, useState } from "react";
 import { getORPIndex } from "../utils/orpCalculator";
 
