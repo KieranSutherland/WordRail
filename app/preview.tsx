@@ -58,39 +58,40 @@ export default function Preview() {
 
     return (
         <SafeAreaView style={ { flex: 1, backgroundColor: colours.background } }>
-            <ScrollView className="flex-1">
-                <View className="pt-8 px-6">
+            <View className="flex-1 p-6 gap-6">
+                <View className="h-10">
                     <SettingsButton />
-
                     <BackButton />
+                </View>
+                <View className="gap-6" style={ { marginTop: -8 } }>
 
-                    <Text style={ { fontSize: 28, fontWeight: 'bold', color: colours.textPrimary, marginBottom: 8 } }>
+                    <Text style={ { fontSize: 28, fontWeight: 'bold', color: colours.textPrimary } }>
                         Preview & Edit
                     </Text>
-                    <Text style={ { color: colours.textSecondary, marginBottom: 24 } }>
+                    <Text style={ { color: colours.textSecondary } }>
                         Review and adjust your text before reading
                     </Text>
 
                     { inputType !== 'text' && (
-                        <View style={ { marginBottom: 16, backgroundColor: colours.surface, borderRadius: 16, padding: 16 } }>
+                        <View style={ { backgroundColor: colours.surface, borderRadius: 16, padding: 16 } }>
                             <Text style={ { fontSize: 14, color: colours.accent } }>
                                 📌 { inputType === 'file' ? 'File upload' : 'Image OCR' } coming soon!
                                 For now, please paste your text manually.
                             </Text>
                         </View>
                     ) }
+                </View>
 
-                    <Text style={ { fontSize: 14, fontWeight: '600', color: colours.textPrimary, marginBottom: 8 } }>
-                        Your Text
-                    </Text>
+                {/* TextInput with flex: 1 to fill remaining space */ }
+                <View className="flex-1">
                     <TextInput
                         style={ {
+                            flex: 1,
                             backgroundColor: colours.surface,
                             borderRadius: 16,
                             padding: 16,
-                            minHeight: 256,
                             fontSize: 16,
-                            color: colours.textPrimary
+                            color: colours.textPrimary,
                         } }
                         multiline
                         placeholder={ getPlaceholder() }
@@ -99,8 +100,11 @@ export default function Preview() {
                         onChangeText={ setLocalText }
                         textAlignVertical="top"
                     />
+                </View>
 
-                    <View style={ { marginTop: 16, marginBottom: 16, backgroundColor: colours.surface, borderRadius: 16, padding: 12 } }>
+                {/* Bottom section */ }
+                <View className="gap-6">
+                    <View style={ { backgroundColor: colours.surface, borderRadius: 16, padding: 16 } }>
                         <Text style={ { fontSize: 14, color: colours.textSecondary } }>
                             Word count: <Text style={ { color: colours.accent, fontWeight: '600' } }>{ processText(localText).length }</Text>
                         </Text>
@@ -112,7 +116,6 @@ export default function Preview() {
                             borderRadius: 16,
                             paddingVertical: 16,
                             alignItems: 'center',
-                            marginBottom: 24
                         } }
                         onPress={ handleStartReading }
                         disabled={ !localText.trim() }
@@ -122,11 +125,11 @@ export default function Preview() {
                             fontWeight: 'bold',
                             fontSize: 18
                         } }>
-                            Start Reading →
+                            Start Reading
                         </Text>
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
+            </View>
         </SafeAreaView>
     );
 }

@@ -4,6 +4,7 @@ import { useRouter } from 'expo-router';
 import { colours } from '../theme/colours';
 import { useAppStore } from '../store';
 import { SpeedPreset } from '../types';
+import IconButton from '../components/IconButton';
 
 export default function Settings() {
     const router = useRouter();
@@ -21,12 +22,21 @@ export default function Settings() {
     return (
         <SafeAreaView style={ { flex: 1, backgroundColor: colours.background } }>
             <ScrollView className="flex-1">
-                <View className="pt-8 px-6">
-                    <TouchableOpacity onPress={ () => router.back() }>
-                        <Text style={ { color: colours.accent, fontWeight: '600', marginBottom: 24 } }>✕ Close</Text>
-                    </TouchableOpacity>
+                <View className="p-6">
+                    <View>
+                        <IconButton
+                            iconName="close"
+                            onPress={ () => router.back() }
+                            style={ {
+                                position: 'absolute',
+                                top: 0,
+                                right: 0,
+                                zIndex: 10
+                            } }
+                        />
+                    </View>
 
-                    <Text style={ { fontSize: 28, fontWeight: 'bold', color: colours.textPrimary, marginBottom: 8 } }>Settings</Text>
+                    <Text className="w-fit" style={ { fontSize: 28, fontWeight: 'bold', color: colours.textPrimary, marginBottom: 8 } }>Settings</Text>
                     <Text style={ { color: colours.textSecondary, marginBottom: 32 } }>
                         Customize your reading experience
                     </Text>
@@ -90,7 +100,7 @@ export default function Settings() {
                             • Focus on the center of the screen where words appear
                         </Text>
                         <Text style={ { fontSize: 12, color: colours.textSecondary, lineHeight: 20 } }>
-                            • Take breaks every 15-20 minutes
+                            • Take regular breaks
                         </Text>
                     </View>
                 </View>

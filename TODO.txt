@@ -3,3 +3,5 @@ pause and indicate for paragraphs
 account for slashes e.g. this/that
 when the user presses back whilst on the text play screen, it goes back to the text input screen and highlights where they got to
 when a user highlights a word in the text input screen, a tooltip appears with the option to start from that word
+create favicon
+controls based on touch of the center of the screen e.g. tap to pause, swipe left to rewind, right right to skip

@@ -9,6 +9,7 @@
     "web": "npx expo start --web"
   },
   "dependencies": {
+    "@expo/vector-icons": "^15.0.3",
     "@react-native-community/slider": "5.1.1",
     "expo": "^54.0.30",
     "expo-router": "^6.0.21",
@@ -20,8 +21,8 @@
     "zustand": "^5.0.9"
   },
   "devDependencies": {
-    "@react-native-community/cli": "20.1.0",
     "@expo/cli": "54.0.20",
+    "@react-native-community/cli": "20.1.0",
     "@types/react": "^19.1.0",
     "babel-preset-expo": "^54.0.9",
     "react-dom": "19.1.0",

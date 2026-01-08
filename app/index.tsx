@@ -19,7 +19,7 @@ export default function Home() {
             id: 'file',
             title: 'File Upload',
             icon: '📄',
-            description: 'Upload a text document'
+            description: 'Upload a text document (.txt, .pdf)'
         },
         {
             id: 'image',
@@ -38,10 +38,12 @@ export default function Home() {
 
     return (
         <SafeAreaView style={ { flex: 1, backgroundColor: colours.background } }>
-            <View className="flex-1 pt-8 px-6">
-                <SettingsButton />
+            <View className="flex-1 p-6">
+                <View>
+                    <SettingsButton />
+                </View>
 
-                <Text style={ { fontSize: 32, fontWeight: 'bold', color: colours.textPrimary, marginBottom: 8 } }>
+                <Text className="my-2 w-fit" style={ { fontSize: 32, fontWeight: 'bold', color: colours.textPrimary } }>
                     WordRail
                 </Text>
                 <Text style={ { fontSize: 16, color: colours.textSecondary, marginBottom: 32 } }>
@@ -52,7 +54,7 @@ export default function Home() {
                     { inputOptions.map((option) => (
                         <TouchableOpacity
                             key={ option.id }
-                            style={ { backgroundColor: colours.surface, borderRadius: 16, padding: 24 } }
+                            style={ { backgroundColor: colours.surface, borderRadius: 16, padding: 24, display: 'flex' } }
                             onPress={ () => handleOptionPress(option.id) }
                         >
                             <Text style={ { fontSize: 32, marginBottom: 12 } }>{ option.icon }</Text>
@@ -65,12 +67,16 @@ export default function Home() {
                 </View>
 
                 <View style={ { marginTop: 32, backgroundColor: colours.surface, borderRadius: 16, padding: 20 } }>
-                    <Text style={ { fontSize: 14, fontWeight: '600', color: colours.accent, marginBottom: 8 } }>
-                        💡 About RSVP Reading
+                    <Text style={ { fontSize: 14, fontWeight: '600', color: colours.accent, marginBottom: 12 } }>
+                        💡 How does it work?
+                    </Text>
+                    <Text style={ { fontSize: 12, color: colours.textSecondary, lineHeight: 20, marginBottom: 8 } }>
+                        <Text style={ { fontWeight: '600' } }>Rapid Serial Visual Presentation (RSVP)</Text> helps you read faster by displaying one word at a time,
+                        reducing eye movement and increasing focus.
                     </Text>
                     <Text style={ { fontSize: 12, color: colours.textSecondary, lineHeight: 20 } }>
-                        Rapid Serial Visual Presentation helps you read faster by displaying one word at a time,
-                        reducing eye movement and increasing focus.
+                        <Text style={ { fontWeight: '600' } }>Optimal Recognition Point (ORP)</Text> helps you comprehend each word
+                        faster by positioning the optimal letter in the center of the screen, further reducing cognitive load.
                     </Text>
                 </View>
             </View>

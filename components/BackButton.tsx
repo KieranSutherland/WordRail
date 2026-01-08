@@ -2,11 +2,9 @@ import { useRouter } from "expo-router";
 import React from "react";
 import {
     GestureResponderEvent,
-    Text,
-    TouchableOpacity,
     TouchableOpacityProps,
 } from 'react-native';
-import { colours } from "../theme/colours";
+import IconButton from "./IconButton";
 
 export default function BackButton(props: TouchableOpacityProps) {
     const router = useRouter();
@@ -20,8 +18,15 @@ export default function BackButton(props: TouchableOpacityProps) {
     }
 
     return (
-        <TouchableOpacity {...props} onPress={onPress}>
-            <Text style={ { color: colours.accent, fontWeight: '600', marginBottom: 16 } }>{ `< Back` }</Text>
-        </TouchableOpacity>
+        <IconButton
+            iconName="arrow-back"
+            onPress={ onPress }
+            style={ {
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                zIndex: 10
+            } }
+        />
     );
 }

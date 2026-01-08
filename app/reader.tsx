@@ -116,20 +116,23 @@ export default function Reader() {
     };
 
     const progress = words.length > 0
-        ? Math.min((currentIndex / words.length) * 100, 100)
+        ? Math.min(((currentIndex + 1) / words.length) * 100, 100)
         : 0;
+
+    const displayableIndex = words.length <= currentIndex ? words.length : currentIndex + 1
 
     return (
         <SafeAreaView style={ { flex: 1, backgroundColor: colours.background } }>
-            <View className="flex-1 pt-8 px-6">
-                <SettingsButton />
+            <View className="flex-1 gap-6 p-6">
+                <View className="h-10">
+                    <SettingsButton />
+                    <BackButton onPress={ handleExit } />
+                </View>
 
-                <BackButton onPress={handleExit} />
-
-                <View className="mb-6">
-                    <View style={ { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 } }>
+                <View style={ { marginTop: -8 } }>
+                    <View style={ { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 12 } }>
                         <Text style={ { fontSize: 14, fontWeight: '600', color: colours.textPrimary } }>
-                            { currentIndex + 1 } / { words.length }
+                            { displayableIndex } / { words.length }
                         </Text>
                         <Text style={ { fontSize: 14, color: colours.textSecondary } }>
                             { Math.round(60000 / baseSpeed) } WPM
@@ -147,15 +150,22 @@ export default function Reader() {
                     </View>
                 </View>
 
-                <View style={ { flex: 1, backgroundColor: colours.surface, borderRadius: 24, padding: 32, marginBottom: 24, alignItems: 'center', justifyContent: 'center' } }>
+                <View style={ {
+                    flex: 1,
+                    backgroundColor: colours.surface,
+                    borderRadius: 24,
+                    padding: 32,
+                    alignItems: 'center',
+                    justifyContent: 'center'
+                } }>
                     { renderWord() }
                 </View>
 
-                <View className="flex-row gap-3 mb-4">
+                <View className="flex-row gap-4">
                     <TouchableOpacity
                         style={ {
                             flex: 1,
-                            backgroundColor: isPlaying ? '#FFD60A' : colours.accent,
+                            backgroundColor: colours.accent,
                             borderRadius: 16,
                             paddingVertical: 16,
                             alignItems: 'center'
@@ -164,7 +174,7 @@ export default function Reader() {
                         disabled={ words.length === 0 }
                     >
                         <Text style={ { color: colours.textPrimary, fontWeight: 'bold', fontSize: 18 } }>
-                            { isPlaying ? '⏸ Pause' : currentIndex > 0 ? '▶️ Resume' : '▶️ Start' }
+                            { isPlaying ? 'Pause' : currentIndex > 0 ? 'Resume' : 'Start' }
                         </Text>
                     </TouchableOpacity>
 
@@ -184,36 +194,9 @@ export default function Reader() {
                             fontWeight: 'bold',
                             fontSize: 18
                         } }>
-                            ↺ Reset
+                            Reset
                         </Text>
                     </TouchableOpacity>
-                </View>
-
-                { currentIndex >= words.length && words.length > 0 && (
-                    <TouchableOpacity
-                        style={ {
-                            backgroundColor: '#34C759',
-                            borderRadius: 16,
-                            paddingVertical: 16,
-                            alignItems: 'center',
-                            marginBottom: 16
-                        } }
-                        onPress={ () => {
-                            resetAll();
-                            router.push('/');
-                        } }
-                    >
-                        <Text style={ { color: colours.textPrimary, fontWeight: 'bold', fontSize: 18 } }>
-                            ✓ Done - Read Another
-                        </Text>
-                    </TouchableOpacity>
-                ) }
-
-                <View style={ { backgroundColor: colours.surface, borderRadius: 16, padding: 16 } }>
-                    <Text style={ { fontSize: 12, color: colours.textSecondary, lineHeight: 20 } }>
-                        Words are centered at their <Text style={ { fontWeight: '600', color: colours.accent } }>Optimal Recognition Point (ORP)</Text> to
-                        keep your eyes in one place for faster reading
-                    </Text>
                 </View>
             </View>
         </SafeAreaView>
