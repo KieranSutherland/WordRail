@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
     View,
     Text,
@@ -19,15 +19,16 @@ export default function Preview() {
     const router = useRouter();
     const { colors } = useAppTheme();
     const { inputType } = useLocalSearchParams<{ inputType: InputOption[ 'id' ] }>();
-    const [ localText, setLocalText ] = useState('');
 
-    const setText = useAppStore((state) => state.setText);
+    const previewText = useAppStore((state) => state.previewText);
+    const setPreviewText = useAppStore((state) => state.setPreviewText);
+    const id = useAppStore((state) => state.id);
     const setId = useAppStore((state) => state.setId);
     const setWords = useAppStore((state) => state.setWords);
     const resetReading = useAppStore((state) => state.resetReading);
 
     const handleStartReading = () => {
-        const trimmedText = localText.trim();
+        const trimmedText = previewText.trim();
 
         if (!trimmedText) {
             Alert.alert('No Text', 'Please enter some text to read.');
@@ -41,9 +42,11 @@ export default function Preview() {
             return;
         }
 
-        setText(trimmedText);
+        setPreviewText(trimmedText);
         setWords(words);
-        setId(Math.random().toString(36).substring(2, 9));
+        if (!id) {
+            setId(Math.random().toString(36).substring(2, 9));
+        }
         resetReading();
         router.push('/reader');
     };
@@ -91,8 +94,8 @@ export default function Preview() {
                         multiline
                         placeholder={ getPlaceholder() }
                         placeholderTextColor={ colors.textSecondary }
-                        value={ localText }
-                        onChangeText={ setLocalText }
+                        value={ previewText }
+                        onChangeText={ setPreviewText }
                         textAlignVertical="top"
                     />
                 </View>
@@ -101,22 +104,22 @@ export default function Preview() {
                 <View className="gap-6">
                     <View style={ { backgroundColor: colors.card, borderRadius: 16, padding: 16 } }>
                         <Text style={ { fontSize: 14, color: colors.textSecondary } }>
-                            Word count: <Text style={ { color: colors.primary, fontWeight: '600' } }>{ processText(localText).length }</Text>
+                            Word count: <Text style={ { color: colors.primary, fontWeight: '600' } }>{ processText(previewText).length }</Text>
                         </Text>
                     </View>
 
                     <TouchableOpacity
                         style={ {
-                            backgroundColor: localText.trim() ? colors.primary : colors.card,
+                            backgroundColor: previewText.trim() ? colors.primary : colors.card,
                             borderRadius: 16,
                             paddingVertical: 16,
                             alignItems: 'center',
                         } }
                         onPress={ handleStartReading }
-                        disabled={ !localText.trim() }
+                        disabled={ !previewText.trim() }
                     >
                         <Text style={ {
-                            color: localText.trim() ? colors.text : colors.textSecondary,
+                            color: previewText.trim() ? colors.text : colors.textSecondary,
                             fontWeight: 'bold',
                             fontSize: 18
                         } }>

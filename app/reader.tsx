@@ -2,10 +2,8 @@ import React, { useEffect, useRef } from 'react';
 import { View, Text, TouchableOpacity, Alert } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import SettingsButton from '../components/buttons/SettingsButton';
 import { useAppStore } from '../store';
 import { getWordDelay } from '../utils/orpCalculator';
-import BackButton from '../components/buttons/BackButton';
 import { Ionicons } from '@expo/vector-icons';
 import CurrentWord from '../components/CurrentWord';
 import { useAppTheme } from '../components/ThemeProvider';
@@ -24,7 +22,6 @@ export default function Reader() {
     const setIsPlaying = useAppStore((state) => state.setIsPlaying);
     const nextWord = useAppStore((state) => state.nextWord);
     const resetReading = useAppStore((state) => state.resetReading);
-    const resetAll = useAppStore((state) => state.resetAll);
     const addPreviousRead = useAppStore((state) => state.addPreviousRead);
 
     useEffect(() => {
@@ -60,8 +57,11 @@ export default function Reader() {
         setIsPlaying(!isPlaying);
     };
 
-    const handleReset = () => {
-        resetReading();
+    const handleEdit = () => {
+        router.push({
+            pathname: '/preview',
+            params: { inputType: 'text' }
+        });
     };
 
     const handleExit = () => {
@@ -69,7 +69,7 @@ export default function Reader() {
             setIsPlaying(false);
         }
         addPreviousRead();
-        resetAll();
+        resetReading();
     };
 
     const progress = words.length > 0
@@ -77,7 +77,6 @@ export default function Reader() {
         : 0;
 
     const displayableIndex = words.length <= currentIndex ? words.length : currentIndex + 1
-    const resetButtonDisabled = words.length === 0 || currentIndex === 0;
 
     return (
         <SafeAreaView style={ { flex: 1, backgroundColor: colors.background } }>
@@ -134,21 +133,24 @@ export default function Reader() {
                     <TouchableOpacity
                         style={ {
                             flex: 1,
-                            backgroundColor: resetButtonDisabled ? colors.card : colors.secondary,
+                            flexDirection: 'row',
+                            justifyContent: 'center',
+                            gap: 15,
+                            backgroundColor: colors.primary,
                             borderRadius: 16,
                             paddingVertical: 16,
                             alignItems: 'center'
                         } }
-                        onPress={ handleReset }
-                        disabled={ resetButtonDisabled }
+                        onPress={ handleEdit }
                     >
                         <Text style={ {
-                            color: resetButtonDisabled ? colors.textSecondary : colors.text,
+                            color: colors.text,
                             fontWeight: 'bold',
                             fontSize: 18
                         } }>
-                            Reset
+                            Edit
                         </Text>
+                        <Ionicons name="pencil-outline" size={ 20 } color={ colors.text } />
                     </TouchableOpacity>
                 </View>
             </View>

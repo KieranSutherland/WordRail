@@ -15,17 +15,20 @@ interface RecentReadItemProps {
 function RecentReadItem({ previousRead: previous }: RecentReadItemProps) {
     const router = useRouter();
     const { colors } = useAppTheme();
-    const setText = useAppStore((state) => state.setText);
+    const setPreviewText = useAppStore((state) => state.setPreviewText);
     const setWords = useAppStore((state) => state.setWords);
     const setCurrentIndex = useAppStore((state) => state.setCurrentIndex);
 
     const progress = Math.round((previous.currentIndex / previous.words.length) * 100);
 
     const onPress = () => {
-        setText(previous.words.join(' '));
+        setPreviewText(previous.previewText);
         setWords(previous.words);
         setCurrentIndex(previous.currentIndex);
-        router.push('/reader');
+        router.push({
+            pathname: '/preview',
+            params: { inputType: 'text' }
+        });
     }
 
     return (
@@ -38,7 +41,9 @@ function RecentReadItem({ previousRead: previous }: RecentReadItemProps) {
                     <Text style={ { fontSize: 20, fontWeight: '600', color: colors.text, marginBottom: 4 } }>
                         { previous.words.slice(0, 5).join(' ') }...
                     </Text>
-                    <Text style={ { fontSize: 14, color: colors.textSecondary } }>Progress: { progress }%</Text>
+                    <Text style={ { fontSize: 14, color: colors.textSecondary } }>
+                        Progress: { progress }%  |  { previous.date.toDateString() }
+                    </Text>
                 </View>
                 <Ionicons className="ml-auto" name="arrow-forward" size={ 30 } color={ colors.text } />
             </View>
@@ -64,7 +69,9 @@ export default function Recents() {
                             No recent reads found.
                         </Text>
                     ) : (
-                        Array.from(previousReads.values()).map((read, index) => (
+                        Array.from(previousReads.values()).sort((read_1, read_2) => {
+                            return read_2.date.getMilliseconds() - read_1.date.getMilliseconds()
+                        }).map((read, index) => (
                             <RecentReadItem key={ index } previousRead={ read } />
                         ))
                     ) }

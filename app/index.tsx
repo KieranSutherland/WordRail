@@ -1,15 +1,15 @@
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useRouter } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
 import { useAppTheme } from '../components/ThemeProvider';
 import RightSideTopBar from '../components/RightSideTopBar';
 import HomeScreenButton, { InputOption } from '../components/HomeScreenButton';
 import Divider from '../components/Divider';
+import { useAppStore } from '../store';
 
 export default function Home() {
     const { colors } = useAppTheme();
+    const resetPreview = useAppStore((state) => state.resetPreview);
 
     const inputOptions: InputOption[] = [
         {
@@ -17,21 +17,24 @@ export default function Home() {
             title: 'Raw Text',
             iconName: 'text-outline',
             description: 'Type or paste text directly',
-            pathname: '/preview'
+            pathname: '/preview',
+            onPress: resetPreview
         },
         {
             id: 'file',
             title: 'File Upload',
             iconName: 'document-text-outline',
             description: 'Upload a text document (.txt, .pdf)',
-            pathname: '/preview'
+            pathname: '/preview',
+            onPress: resetPreview
         },
         {
             id: 'image',
             title: 'Image / Screenshot',
             iconName: 'image-outline',
             description: 'Extract text from an image',
-            pathname: '/preview'
+            pathname: '/preview',
+            onPress: resetPreview
         },
     ];
 

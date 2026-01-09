@@ -6,3 +6,4 @@ when a user highlights a word in the text input screen, a tooltip appears with t
 create favicon
 controls based on touch of the center of the screen e.g. tap to pause, swipe left to rewind, right right to skip
 website/article based input (cut through the ads)
+some way to choose and signify what index to start at (implement for recents flow clarity)

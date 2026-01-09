@@ -10,6 +10,7 @@ export interface InputOption {
     iconName: React.ComponentProps<typeof Ionicons>[ 'name' ];
     description: string;
     pathname: string;
+    onPress?: () => void;
 }
 
 interface HomeScreenButtonProps {
@@ -22,6 +23,9 @@ export default function HomeScreenButton(props: HomeScreenButtonProps) {
     const { colors } = useAppTheme();
 
     const handleOptionPress = (optionId: string) => {
+        if (option.onPress) {
+            option.onPress();
+        }
         router.push({
             pathname: option.pathname,
             params: { inputType: optionId }
