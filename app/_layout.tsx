@@ -19,8 +19,16 @@ export default function RootLayout() {
                 <Stack.Screen name="index" />
                 <Stack.Screen name="preview" />
                 <Stack.Screen name="reader" />
+                <Stack.Screen name="recents" />
                 <Stack.Screen
                     name="settings"
+                    options={ {
+                        presentation: 'modal',
+                        animation: 'slide_from_bottom',
+                    } }
+                />
+                <Stack.Screen
+                    name="info"
                     options={ {
                         presentation: 'modal',
                         animation: 'slide_from_bottom',

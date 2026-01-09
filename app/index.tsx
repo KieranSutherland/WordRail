@@ -2,13 +2,13 @@ import React from 'react';
 import { View, Text, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
-import SettingsButton from '../components/buttons/SettingsButton';
-import { InputOption } from '../types';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppTheme } from '../components/ThemeProvider';
+import RightSideTopBar from '../components/RightSideTopBar';
+import HomeScreenButton, { InputOption } from '../components/HomeScreenButton';
+import Divider from '../components/Divider';
 
 export default function Home() {
-    const router = useRouter();
     const { colors } = useAppTheme();
 
     const inputOptions: InputOption[] = [
@@ -16,34 +16,30 @@ export default function Home() {
             id: 'text',
             title: 'Raw Text',
             iconName: 'text-outline',
-            description: 'Type or paste text directly'
+            description: 'Type or paste text directly',
+            pathname: '/preview'
         },
         {
             id: 'file',
             title: 'File Upload',
             iconName: 'document-text-outline',
-            description: 'Upload a text document (.txt, .pdf)'
+            description: 'Upload a text document (.txt, .pdf)',
+            pathname: '/preview'
         },
         {
             id: 'image',
             title: 'Image / Screenshot',
             iconName: 'image-outline',
-            description: 'Extract text from an image'
+            description: 'Extract text from an image',
+            pathname: '/preview'
         },
     ];
-
-    const handleOptionPress = (optionId: string) => {
-        router.push({
-            pathname: '/preview',
-            params: { inputType: optionId }
-        });
-    };
 
     return (
         <SafeAreaView style={ { flex: 1, backgroundColor: colors.background } }>
             <View className="flex-1 p-6">
                 <View>
-                    <SettingsButton />
+                    <RightSideTopBar />
                 </View>
 
                 <View className="w-fit mb-7">
@@ -61,39 +57,24 @@ export default function Home() {
                 </View>
 
                 <View className="gap-4">
-                    { inputOptions.map((option) => (
-                        <TouchableOpacity
-                            key={ option.id }
-                            style={ { backgroundColor: colors.card, borderRadius: 16, padding: 24, display: 'flex' } }
-                            onPress={ () => handleOptionPress(option.id) }
-                        >
-                            <View className="flex-1 flex-row items-center">
-                                <View className="flex-col">
-                                    <Ionicons name={ option.iconName } size={ 30 } color={ colors.primary } />
-                                    <Text style={ { fontSize: 20, fontWeight: '600', color: colors.text, marginBottom: 4 } }>
-                                        { option.title }
-                                    </Text>
-                                    <Text style={ { fontSize: 14, color: colors.textSecondary } }>{ option.description }</Text>
-                                </View>
-                                <Ionicons className="ml-auto" name="arrow-forward" size={ 30 } color={ colors.text } />
-                            </View>
-                        </TouchableOpacity>
-                    )) }
+                    {
+                        inputOptions.map((option) => (
+                            <HomeScreenButton key={ option.id } option={ option } />
+                        ))
+                    }
                 </View>
 
-                <View style={ { marginTop: 32, backgroundColor: colors.card, borderRadius: 16, padding: 20 } }>
-                    <Text style={ { fontSize: 14, fontWeight: '600', color: colors.primary, marginBottom: 12 } }>
-                        💡 How does it work?
-                    </Text>
-                    <Text style={ { fontSize: 12, color: colors.textSecondary, lineHeight: 20, marginBottom: 8 } }>
-                        <Text style={ { fontWeight: '600' } }>Rapid Serial Visual Presentation (RSVP)</Text> helps you read faster by displaying one word at a time,
-                        reducing eye movement and increasing focus.
-                    </Text>
-                    <Text style={ { fontSize: 12, color: colors.textSecondary, lineHeight: 20 } }>
-                        <Text style={ { fontWeight: '600' } }>Optimal Recognition Point (ORP)</Text> helps you comprehend each word
-                        faster by positioning the optimal letter in the center of the screen, further reducing cognitive load.
-                    </Text>
-                </View>
+                <Divider />
+
+                <HomeScreenButton
+                    option={ {
+                        title: 'Recents',
+                        description: 'Go back to your previous reads',
+                        iconName: 'time-outline',
+                        id: 'recents',
+                        pathname: '/recents'
+                    } }
+                />
             </View>
         </SafeAreaView>
     );

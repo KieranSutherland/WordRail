@@ -3,9 +3,13 @@ import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import { useAppStore } from '../store';
-import { SpeedPreset } from '../types';
 import IconButton from '../components/buttons/IconButton';
 import { useAppTheme } from '../components/ThemeProvider';
+
+export interface SpeedPreset {
+    label: string;
+    value: number;
+}
 
 export default function Settings() {
     const router = useRouter();
@@ -87,22 +91,7 @@ export default function Settings() {
                         </Text>
                         <Text style={ { fontSize: 12, color: colors.textSecondary, lineHeight: 20 } }>
                             Longer words automatically display for more time. The base speed affects
-                            short words most, while long words get proportionally more time.
-                        </Text>
-                    </View>
-
-                    <View style={ { backgroundColor: colors.card, borderRadius: 16, padding: 20 } }>
-                        <Text style={ { fontSize: 12, fontWeight: '600', color: colors.primary, marginBottom: 12 } }>
-                            💡 Reading Tips
-                        </Text>
-                        <Text style={ { fontSize: 12, color: colors.textSecondary, lineHeight: 20, marginBottom: 8 } }>
-                            • Start with a slower speed and gradually increase
-                        </Text>
-                        <Text style={ { fontSize: 12, color: colors.textSecondary, lineHeight: 20, marginBottom: 8 } }>
-                            • Focus on the center of the screen where words appear
-                        </Text>
-                        <Text style={ { fontSize: 12, color: colors.textSecondary, lineHeight: 20 } }>
-                            • Take regular breaks
+                            short words, while long words get proportionally more time.
                         </Text>
                     </View>
                 </View>

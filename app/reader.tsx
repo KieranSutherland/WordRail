@@ -16,6 +16,7 @@ export default function Reader() {
     const { colors } = useAppTheme();
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
+    const id = useAppStore((state) => state.id);
     const words = useAppStore((state) => state.words);
     const currentIndex = useAppStore((state) => state.currentIndex);
     const isPlaying = useAppStore((state) => state.isPlaying);
@@ -24,6 +25,7 @@ export default function Reader() {
     const nextWord = useAppStore((state) => state.nextWord);
     const resetReading = useAppStore((state) => state.resetReading);
     const resetAll = useAppStore((state) => state.resetAll);
+    const addPreviousRead = useAppStore((state) => state.addPreviousRead);
 
     useEffect(() => {
         if (words.length === 0) {
@@ -66,6 +68,7 @@ export default function Reader() {
         if (isPlaying) {
             setIsPlaying(false);
         }
+        addPreviousRead();
         resetAll();
     };
 
@@ -81,7 +84,7 @@ export default function Reader() {
             <View className="flex-1 gap-6 p-6">
                 <TopBar onBack={ handleExit } />
 
-                <View style={ { marginTop: -8 } }>
+                <View>
                     <View style={ { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', padding: 12 } }>
                         <Text style={ { fontSize: 14, fontWeight: '600', color: colors.text } }>
                             { displayableIndex } / { words.length }

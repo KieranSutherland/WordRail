@@ -11,8 +11,9 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useAppStore } from '../store';
 import { processText } from '../utils/textProcessor';
 import { useAppTheme } from '../components/ThemeProvider';
-import { InputOption } from '../types';
 import TopBar from '../components/TopBar';
+import { InputOption } from '../components/HomeScreenButton';
+import PageHeader from '../components/PageHeader';
 
 export default function Preview() {
     const router = useRouter();
@@ -21,6 +22,7 @@ export default function Preview() {
     const [ localText, setLocalText ] = useState('');
 
     const setText = useAppStore((state) => state.setText);
+    const setId = useAppStore((state) => state.setId);
     const setWords = useAppStore((state) => state.setWords);
     const resetReading = useAppStore((state) => state.resetReading);
 
@@ -41,6 +43,7 @@ export default function Preview() {
 
         setText(trimmedText);
         setWords(words);
+        setId(Math.random().toString(36).substring(2, 9));
         resetReading();
         router.push('/reader');
     };
@@ -60,15 +63,10 @@ export default function Preview() {
         <SafeAreaView style={ { flex: 1, backgroundColor: colors.background } }>
             <View className="flex-1 p-6 gap-6">
                 <TopBar />
-                <View className="gap-6" style={ { marginTop: -8 } }>
-
-                    <Text style={ { fontSize: 28, fontWeight: 'bold', color: colors.text } }>
-                        Preview & Edit
-                    </Text>
-                    <Text style={ { color: colors.textSecondary } }>
-                        Review and adjust your text before reading
-                    </Text>
-
+                <PageHeader
+                    title="Preview & Edit"
+                    subtitle="Review and adjust your text before reading"
+                >
                     { inputType !== 'text' && (
                         <View style={ { backgroundColor: colors.card, borderRadius: 16, padding: 16 } }>
                             <Text style={ { fontSize: 14, color: colors.primary } }>
@@ -77,7 +75,7 @@ export default function Preview() {
                             </Text>
                         </View>
                     ) }
-                </View>
+                </PageHeader>
 
                 {/* TextInput with flex: 1 to fill remaining space */ }
                 <View className="flex-1">
