@@ -1,39 +1,42 @@
 {
-    "expo": {
-        "name": "wordrail",
-        "slug": "wordrail",
-        "version": "1.0.0",
-        "orientation": "portrait",
-        "icon": "./assets/icon.png",
-        "userInterfaceStyle": "light",
-        "newArchEnabled": true,
-        "splash": {
-            "image": "./assets/splash-icon.png",
-            "resizeMode": "contain",
-            "backgroundColor": "#0F1115"
-        },
-        "ios": {
-            "backgroundColor": "#0F1115",
-            "supportsTablet": true
-        },
-        "android": {
-            "adaptiveIcon": {
-                "foregroundImage": "./assets/adaptive-icon.png",
-                "backgroundColor": "#0F1115"
-            },
-            "backgroundColor": "#0F1115",
-            "edgeToEdgeEnabled": true,
-            "predictiveBackGestureEnabled": false
-        },
-        "web": {
-            "favicon": "./assets/favicon.png",
-            "bundler": "metro"
-        },
-        "extra": {
-            "eas": {
-                "projectId": "831b670f-0aed-49a1-b740-3ab9018a67ff"
-            }
-        },
-        "owner": "aximzzs-organization"
-    }
+  "expo": {
+    "name": "wordrail",
+    "slug": "wordrail",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#0F1115"
+    },
+    "ios": {
+      "backgroundColor": "#0F1115",
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#0F1115"
+      },
+      "backgroundColor": "#0F1115",
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png",
+      "bundler": "metro"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "831b670f-0aed-49a1-b740-3ab9018a67ff"
+      }
+    },
+    "owner": "aximzzs-organization",
+    "plugins": [
+      "expo-font"
+    ]
+  }
 }
