@@ -4,6 +4,7 @@ interface AppTheme extends ReactNavigation.Theme {
     colors: ReactNavigation.Theme[ 'colors' ] & {
         secondary: string;
         textSecondary: string;
+        cardHover: string;
     };
 }
 
@@ -19,6 +20,7 @@ const theme: AppTheme = {
         secondary: '#2A6FDB',
         background: '#0F1115',
         card: '#1A1C20',
+        cardHover: '#27292e',
         text: '#EDEDED',
         textSecondary: '#8E8E93',
     },

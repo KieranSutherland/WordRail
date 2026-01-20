@@ -1,8 +1,9 @@
 import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import { View, Text } from 'react-native';
 import { useAppTheme } from './ThemeProvider';
 import { useRouter } from 'expo-router';
+import { BaseButton } from './buttons/BaseButton';
 
 export interface InputOption {
     id: 'text' | 'file' | 'image' | 'recents';
@@ -33,9 +34,14 @@ export default function HomeScreenButton(props: HomeScreenButtonProps) {
     };
 
     return (
-        <TouchableOpacity
+        <BaseButton
             key={ option.id }
-            style={ { backgroundColor: colors.card, borderRadius: 16, padding: 24, display: 'flex' } }
+            style={ {
+                borderRadius: 16,
+                padding: 24,
+                display: 'flex'
+            } }
+            bgColor={ colors.card }
             onPress={ () => handleOptionPress(option.id) }
         >
             <View className="flex-1 flex-row items-center">
@@ -48,6 +54,6 @@ export default function HomeScreenButton(props: HomeScreenButtonProps) {
                 </View>
                 <Ionicons className="ml-auto" name="arrow-forward" size={ 30 } color={ colors.text } />
             </View>
-        </TouchableOpacity>
+        </BaseButton>
     );
 }

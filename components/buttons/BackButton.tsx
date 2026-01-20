@@ -1,12 +1,10 @@
 import { useRouter } from "expo-router";
 import React from "react";
-import {
-    GestureResponderEvent,
-    TouchableOpacityProps,
-} from 'react-native';
-import IconButton from "./IconButton";
+import { GestureResponderEvent } from 'react-native';
+import IconButton, { IconButtonProps } from "./IconButton";
+import { back } from "../../utils/navigation";
 
-export default function BackButton(props: TouchableOpacityProps) {
+export default function BackButton(props: IconButtonProps) {
     const router = useRouter();
 
     const onPress = (event: GestureResponderEvent) => {
@@ -14,7 +12,7 @@ export default function BackButton(props: TouchableOpacityProps) {
         if (props.onPress) {
             props.onPress(event);
         }
-        router.back();
+        back(router);
     }
 
     return (

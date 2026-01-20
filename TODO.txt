@@ -1,4 +1,3 @@
-auto-hyphen for long words
 pause and indicate for paragraphs
 account for slashes e.g. this/that
 when the user presses back whilst on the text play screen, it goes back to the text input screen and highlights where they got to

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { View, Text, TouchableOpacity, Alert } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, Alert } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAppStore } from '../store';
 import { getWordDelay } from '../utils/orpCalculator';
@@ -8,31 +7,24 @@ import { Ionicons } from '@expo/vector-icons';
 import CurrentWord from '../components/CurrentWord';
 import { useAppTheme } from '../components/ThemeProvider';
 import TopBar from '../components/TopBar';
+import BaseWrapper from '../components/BaseWrapper';
+import { BaseButton } from '../components/buttons/BaseButton';
 
 export default function Reader() {
     const router = useRouter();
     const { colors } = useAppTheme();
     const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-    const id = useAppStore((state) => state.id);
     const words = useAppStore((state) => state.words);
     const currentIndex = useAppStore((state) => state.currentIndex);
     const isPlaying = useAppStore((state) => state.isPlaying);
     const baseSpeed = useAppStore((state) => state.baseSpeed);
+    const rewind = useAppStore((state) => state.rewind);
+    const forward = useAppStore((state) => state.forward);
     const setIsPlaying = useAppStore((state) => state.setIsPlaying);
     const nextWord = useAppStore((state) => state.nextWord);
     const resetReading = useAppStore((state) => state.resetReading);
     const addPreviousRead = useAppStore((state) => state.addPreviousRead);
-
-    useEffect(() => {
-        if (words.length === 0) {
-            Alert.alert(
-                'No Text',
-                'Please go back and enter some text to read.',
-                [ { text: 'OK', onPress: () => router.back() } ]
-            );
-        }
-    }, []);
 
     useEffect(() => {
         if (isPlaying && words.length > 0 && currentIndex < words.length) {
@@ -52,10 +44,6 @@ export default function Reader() {
             }
         };
     }, [ isPlaying, currentIndex, words, baseSpeed, nextWord, setIsPlaying ]);
-
-    const handlePlayPause = () => {
-        setIsPlaying(!isPlaying);
-    };
 
     const handleEdit = () => {
         router.push({
@@ -79,7 +67,7 @@ export default function Reader() {
     const displayableIndex = words.length <= currentIndex ? words.length : currentIndex + 1
 
     return (
-        <SafeAreaView style={ { flex: 1, backgroundColor: colors.background } }>
+        <BaseWrapper>
             <View className="flex-1 gap-6 p-6">
                 <TopBar onBack={ handleExit } />
 
@@ -116,27 +104,57 @@ export default function Reader() {
                 </View>
 
                 <View className="flex-row gap-4">
-                    <TouchableOpacity
+                    <BaseButton
+                        bgColor={ colors.primary }
+                        disabledColor={ colors.card }
                         style={ {
                             flex: 1,
-                            backgroundColor: colors.primary,
                             borderRadius: 16,
                             paddingVertical: 16,
                             alignItems: 'center'
                         } }
-                        onPress={ handlePlayPause }
+                        onPress={ rewind }
+                        disabled={ words.length === 0 }
+                    >
+                        <Ionicons name={ 'play-back' } size={ 30 } color={ colors.text } />
+                    </BaseButton>
+                    <BaseButton
+                        bgColor={ colors.primary }
+                        disabledColor={ colors.card }
+                        style={ {
+                            flex: 1,
+                            borderRadius: 16,
+                            paddingVertical: 16,
+                            alignItems: 'center'
+                        } }
+                        onPress={ () => setIsPlaying(!isPlaying) }
                         disabled={ words.length === 0 }
                     >
                         <Ionicons name={ isPlaying ? 'pause' : 'play' } size={ 30 } color={ colors.text } />
-                    </TouchableOpacity>
+                    </BaseButton>
+                    <BaseButton
+                        bgColor={ colors.primary }
+                        disabledColor={ colors.card }
+                        style={ {
+                            flex: 1,
+                            borderRadius: 16,
+                            paddingVertical: 16,
+                            alignItems: 'center'
+                        } }
+                        onPress={ forward }
+                        disabled={ words.length === 0 }
+                    >
+                        <Ionicons name={ 'play-forward' } size={ 30 } color={ colors.text } />
+                    </BaseButton>
 
-                    <TouchableOpacity
+                    {/* <BaseButton
+                        bgColor={ colors.primary }
+                        disabledColor={ colors.card }
                         style={ {
                             flex: 1,
                             flexDirection: 'row',
                             justifyContent: 'center',
                             gap: 15,
-                            backgroundColor: colors.primary,
                             borderRadius: 16,
                             paddingVertical: 16,
                             alignItems: 'center'
@@ -151,9 +169,9 @@ export default function Reader() {
                             Edit
                         </Text>
                         <Ionicons name="pencil-outline" size={ 20 } color={ colors.text } />
-                    </TouchableOpacity>
+                    </BaseButton> */}
                 </View>
             </View>
-        </SafeAreaView>
+        </BaseWrapper>
     );
 }

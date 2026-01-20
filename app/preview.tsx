@@ -3,10 +3,8 @@ import {
     View,
     Text,
     TextInput,
-    TouchableOpacity,
     Alert
 } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter, useLocalSearchParams } from 'expo-router';
 import { useAppStore } from '../store';
 import { processText } from '../utils/textProcessor';
@@ -14,6 +12,8 @@ import { useAppTheme } from '../components/ThemeProvider';
 import TopBar from '../components/TopBar';
 import { InputOption } from '../components/HomeScreenButton';
 import PageHeader from '../components/PageHeader';
+import BaseWrapper from '../components/BaseWrapper';
+import { BaseButton } from '../components/buttons/BaseButton';
 
 export default function Preview() {
     const router = useRouter();
@@ -63,7 +63,7 @@ export default function Preview() {
     };
 
     return (
-        <SafeAreaView style={ { flex: 1, backgroundColor: colors.background } }>
+        <BaseWrapper>
             <View className="flex-1 p-6 gap-6">
                 <TopBar />
                 <PageHeader
@@ -108,13 +108,15 @@ export default function Preview() {
                         </Text>
                     </View>
 
-                    <TouchableOpacity
+                    <BaseButton
                         style={ {
-                            backgroundColor: previewText.trim() ? colors.primary : colors.card,
                             borderRadius: 16,
                             paddingVertical: 16,
                             alignItems: 'center',
                         } }
+                        bgColor={ colors.primary }
+                        disabledColor={ colors.card }
+                        hoverEffect='darken'
                         onPress={ handleStartReading }
                         disabled={ !previewText.trim() }
                     >
@@ -125,9 +127,9 @@ export default function Preview() {
                         } }>
                             Start Reading
                         </Text>
-                    </TouchableOpacity>
+                    </BaseButton>
                 </View>
             </View>
-        </SafeAreaView>
+        </BaseWrapper>
     );
 }

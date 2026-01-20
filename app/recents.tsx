@@ -1,12 +1,13 @@
 import React from "react";
-import { View, Text, TouchableOpacity } from 'react-native';
-import { SafeAreaView } from "react-native-safe-area-context";
+import { View, Text } from 'react-native';
 import { useAppTheme } from '../components/ThemeProvider';
 import TopBar from '../components/TopBar';
 import { PreviousRead, useAppStore } from "../store";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
 import PageHeader from "../components/PageHeader";
+import BaseWrapper from "../components/BaseWrapper";
+import { BaseButton } from "../components/buttons/BaseButton";
 
 interface RecentReadItemProps {
     previousRead: PreviousRead;
@@ -32,8 +33,9 @@ function RecentReadItem({ previousRead: previous }: RecentReadItemProps) {
     }
 
     return (
-        <TouchableOpacity
-            style={ { backgroundColor: colors.card, borderRadius: 16, padding: 24, display: 'flex' } }
+        <BaseButton
+            bgColor={ colors.card }
+            style={ { borderRadius: 16, padding: 24, display: 'flex' } }
             onPress={ onPress }
         >
             <View className="flex-1 flex-row items-center">
@@ -47,7 +49,7 @@ function RecentReadItem({ previousRead: previous }: RecentReadItemProps) {
                 </View>
                 <Ionicons className="ml-auto" name="arrow-forward" size={ 30 } color={ colors.text } />
             </View>
-        </TouchableOpacity>
+        </BaseButton>
     )
 }
 
@@ -56,7 +58,7 @@ export default function Recents() {
     const previousReads = useAppStore((state) => state.previousReads);
 
     return (
-        <SafeAreaView style={ { flex: 1, backgroundColor: colors.background } }>
+        <BaseWrapper>
             <View className="flex-1 p-6 gap-6">
                 <TopBar disableRightSide />
                 <PageHeader
@@ -77,6 +79,6 @@ export default function Recents() {
                     ) }
                 </View>
             </View>
-        </SafeAreaView>
+        </BaseWrapper>
     )
 }

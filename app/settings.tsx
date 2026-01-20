@@ -1,10 +1,12 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { View, Text, ScrollView } from 'react-native';
 import { useRouter } from 'expo-router';
 import { useAppStore } from '../store';
 import IconButton from '../components/buttons/IconButton';
 import { useAppTheme } from '../components/ThemeProvider';
+import BaseWrapper from '../components/BaseWrapper';
+import { BaseButton } from '../components/buttons/BaseButton';
+import { back } from '../utils/navigation';
 
 export interface SpeedPreset {
     label: string;
@@ -26,13 +28,13 @@ export default function Settings() {
     ];
 
     return (
-        <SafeAreaView style={ { flex: 1, backgroundColor: colors.background } }>
+        <BaseWrapper>
             <ScrollView className="flex-1">
                 <View className="p-6">
                     <View>
                         <IconButton
                             iconName="close"
-                            onPress={ () => router.back() }
+                            onPress={ () => back(router) }
                             style={ {
                                 position: 'absolute',
                                 top: 0,
@@ -56,10 +58,10 @@ export default function Settings() {
 
                     <View className="gap-3 mb-6">
                         { speedPresets.map((preset) => (
-                            <TouchableOpacity
+                            <BaseButton
+                                bgColor={ baseSpeed === preset.value ? colors.primary : colors.card }
                                 key={ preset.value }
                                 style={ {
-                                    backgroundColor: baseSpeed === preset.value ? colors.primary : colors.card,
                                     borderRadius: 16,
                                     paddingVertical: 16,
                                     paddingHorizontal: 20
@@ -81,7 +83,7 @@ export default function Settings() {
                                         { Math.round(60000 / preset.value) } WPM
                                     </Text>
                                 </View>
-                            </TouchableOpacity>
+                            </BaseButton>
                         )) }
                     </View>
 
@@ -96,6 +98,6 @@ export default function Settings() {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </BaseWrapper>
     );
 }

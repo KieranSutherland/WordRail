@@ -1,9 +1,10 @@
 import React from 'react';
-import { TouchableOpacity, TouchableOpacityProps } from 'react-native';
+import { PressableProps } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useAppTheme } from '../ThemeProvider';
+import { BaseButton } from './BaseButton';
 
-interface IconButtonProps extends TouchableOpacityProps {
+export interface IconButtonProps extends PressableProps {
     iconName: React.ComponentProps<typeof Ionicons>[ 'name' ];
     iconProps?: Partial<React.ComponentProps<typeof Ionicons>>;
 }
@@ -12,7 +13,8 @@ export default function IconButton(props: IconButtonProps) {
     const { iconName, iconProps, style, ...rest } = props;
     const { colors } = useAppTheme();
     return (
-        <TouchableOpacity
+        <BaseButton
+            bgColor={ colors.background }
             style={ {
                 width: 44,
                 height: 44,
@@ -26,6 +28,6 @@ export default function IconButton(props: IconButtonProps) {
             { ...rest }
         >
             <Ionicons name={ iconName } size={ 22 } color={ colors.text } { ...iconProps } />
-        </TouchableOpacity>
+        </BaseButton>
     );
 }

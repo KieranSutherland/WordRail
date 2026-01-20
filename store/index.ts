@@ -22,6 +22,10 @@ interface AppState {
     currentIndex: number;
     isPlaying: boolean;
 
+    // Playback
+    rewindAmount: number; // How many words to rewind.
+    forwardAmount: number // How many words to skip.
+
     // History
     previousReads: Map<string, PreviousRead>;
 
@@ -32,6 +36,10 @@ interface AppState {
     setWords: (words: string[]) => void;
     setCurrentIndex: (index: number) => void;
     setIsPlaying: (playing: boolean) => void;
+    setRewindAmount: (amount: number) => void;
+    setForwardAmount: (amount: number) => void;
+    rewind: () => void;
+    forward: () => void;
     addPreviousRead: () => void;
     nextWord: () => void;
     resetReading: () => void;
@@ -46,6 +54,8 @@ export const useAppStore = create<AppState>((set) => ({
     id: '',
     words: [],
     currentIndex: 0,
+    rewindAmount: 5,
+    forwardAmount: 5,
     isPlaying: false,
     previousReads: new Map(),
 
@@ -56,13 +66,26 @@ export const useAppStore = create<AppState>((set) => ({
     setWords: (words) => set({ words }),
     setCurrentIndex: (currentIndex) => set({ currentIndex }),
     setIsPlaying: (isPlaying) => set({ isPlaying }),
+    setRewindAmount: (rewindAmount) => set({ rewindAmount }),
+    setForwardAmount: (forwardAmount) => set({ forwardAmount }),
+    rewind: () => set((state) => {
+        if (state.currentIndex - state.rewindAmount < 0) {
+            return {
+                currentIndex: 0
+            }
+        }
+        return { 
+            currentIndex: state.currentIndex - state.rewindAmount 
+        }
+    }),
+    forward: () => set((state) => ({ currentIndex: state.currentIndex + state.forwardAmount })),
     addPreviousRead: () => set((state) => {
         const newPreviousReads = new Map(state.previousReads);
         newPreviousReads.set(state.id, {
             previewText: state.previewText,
-            words: state.words, 
-            currentIndex: state.currentIndex, 
-            date: new Date(), 
+            words: state.words,
+            currentIndex: state.currentIndex,
+            date: new Date(),
             id: state.id
         });
         return {

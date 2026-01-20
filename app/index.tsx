@@ -1,11 +1,11 @@
 import React from 'react';
 import { View, Text } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useAppTheme } from '../components/ThemeProvider';
 import RightSideTopBar from '../components/RightSideTopBar';
 import HomeScreenButton, { InputOption } from '../components/HomeScreenButton';
 import Divider from '../components/Divider';
 import { useAppStore } from '../store';
+import BaseWrapper from '../components/BaseWrapper';
 
 export default function Home() {
     const { colors } = useAppTheme();
@@ -39,7 +39,7 @@ export default function Home() {
     ];
 
     return (
-        <SafeAreaView style={ { flex: 1, backgroundColor: colors.background } }>
+        <BaseWrapper>
             <View className="flex-1 p-6">
                 <View>
                     <RightSideTopBar />
@@ -79,6 +79,6 @@ export default function Home() {
                     } }
                 />
             </View>
-        </SafeAreaView>
+        </BaseWrapper>
     );
 }

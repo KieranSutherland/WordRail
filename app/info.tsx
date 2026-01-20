@@ -1,22 +1,23 @@
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { useRouter } from 'expo-router';
 import IconButton from '../components/buttons/IconButton';
 import { useAppTheme } from '../components/ThemeProvider';
+import BaseWrapper from '../components/BaseWrapper';
+import { back } from '../utils/navigation';
 
 export default function Info() {
     const router = useRouter();
     const { colors } = useAppTheme();
 
     return (
-        <SafeAreaView style={ { flex: 1, backgroundColor: colors.background } }>
+        <BaseWrapper>
             <ScrollView className="flex-1">
                 <View className="p-6">
                     <View>
                         <IconButton
                             iconName="close"
-                            onPress={ () => router.back() }
+                            onPress={ () => back(router) }
                             style={ {
                                 position: 'absolute',
                                 top: 0,
@@ -63,6 +64,6 @@ export default function Info() {
                     </View>
                 </View>
             </ScrollView>
-        </SafeAreaView>
+        </BaseWrapper>
     );
 }
